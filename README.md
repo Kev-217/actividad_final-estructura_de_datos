@@ -64,3 +64,23 @@ En cada archivo *.c* tendremos la programación real de su respectivo *.h*.
 Nuevamente agrupados por categoría:
     - **busqueda.md** contiene la búsqueda *Linal* y la *Binaria*
     - **ordenamiento.md** contiene *Inserción* y *Quick Sort*
+
+## Especificaciones de el dispositivo
+
+- **Procesador**: AMD Ryzen 5 7533HS with Radeon Graphics
+- **Memoria RAM**: 14 gb
+- **Sistema Operativo**: Microsoft Windows 11 Home Single Language 10.0.26300
+- **Memoria Caché**:
+    Level InstalledSize MaxCacheSize
+    ----- ------------- ------------
+        3           384          384
+        4          3072         3072
+        5         16384        16384
+- **Compilador**: gcc.exe (Rev8, Built by MSYS2 project) 15.2.0
+
+> [!Note] Para obtener los datos se usaron los siguientes comandos en Power Shell
+    - **Procesador**: Get-CimInstance Win32_Processor | Select-Object Name
+    - **Memoria RAM**: Get-CimInstance Win32_ComputerSystem | Select-Object @{Name="RAM_GB";Expression={[math]::Round($_.TotalPhysicalMemory/1GB,2)}}
+    - **Sistema Operativo**: Get-CimInstance Win32_OperatingSystem | Select-Object Caption, Version
+    - **Memoria Caché**: Get-CimInstance Win32_CacheMemory | Select-Object Level, InstalledSize, MaxCacheSize
+    - **Compilador**: gcc --version
