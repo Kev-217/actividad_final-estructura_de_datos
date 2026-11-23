@@ -4,8 +4,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
+#include <windows.h>
 #include "utilidades.h"
-// Añadimos las librerías ctype.h, errno.h, limits.h, stdio.h, stdlib.h y string.h para poder usar funciones de manejo de caracteres, manejo de errores, límites de enteros, entrada/salida estándar, funciones de utilidad general y manipulación de cadenas. También incluimos la cabecera "utilidades.h" que contiene las declaraciones de las funciones implementadas en este archivo.
+// Añadimos las librerías ctype.h, errno.h, limits.h, stdio.h, stdlib.h, string.h, time.h y windows.h para poder usar funciones de manejo de caracteres, manejo de errores, límites de enteros, entrada/salida estándar, funciones de utilidad general, manipulación de cadenas, manejo de tiempo y funciones específicas de Windows. También incluimos la cabecera "utilidades.h" que contiene las declaraciones de las funciones implementadas en este archivo.
 
 // Implementación de la función leer_entero. Esta función lee un número entero desde la entrada estándar, mostrando un mensaje al usuario. Recibe un mensaje y un puntero a un entero donde almacenar el valor leído. Devuelve 1 si la lectura fue correcta, 0 si hubo un error de formato y -1 si ocurrió un error de entrada/salida.
 int leer_entero(const char *mensaje, int *valor)
@@ -263,7 +265,7 @@ void imprimir_arreglo(const int arreglo[], int n)
     {
         printf("%d ", arreglo[i]);
     }
-    printf("... (%d elementos) ... ", n);
+    printf("... (%d elementos) ... ", n-40);
     for (int i = n - limite; i < n; i++)
     {
         printf("%d", arreglo[i]);
@@ -291,4 +293,32 @@ int esta_ordenado(const int arreglo[], int n)
         }
     }
     return 1;
+}
+
+// Implementación de la función tiempo_actual_segundos. Esta función devuelve el tiempo actual en segundos como un número de punto flotante. Utiliza funciones específicas de Windows si está disponible, o una alternativa portable si no lo está.
+double tiempo_actual_segundos(void)
+{
+#ifdef _WIN32
+    static LARGE_INTEGER frecuencia;
+    static int inicializado = 0;
+    static int usar_alta_resolucion = 0;
+
+    if (!inicializado) {
+        usar_alta_resolucion = QueryPerformanceFrequency(&frecuencia) != 0;
+        inicializado = 1;
+    }
+
+    if (usar_alta_resolucion) {
+        LARGE_INTEGER contador;
+        QueryPerformanceCounter(&contador);
+        return (double)contador.QuadPart / (double)frecuencia.QuadPart;
+    }
+#endif
+
+    /* Alternativa portable si no esta disponible el contador de Windows. */
+    {
+        struct timespec momento;
+        timespec_get(&momento, TIME_UTC);
+        return (double)momento.tv_sec + (double)momento.tv_nsec / 1000000000.0;
+    }
 }

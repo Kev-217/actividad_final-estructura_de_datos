@@ -106,7 +106,7 @@ Nuevamente agrupados por categoría:
 Abrir una terminal en la carpeta principal del proyecto y ejecutar:
 
 ```bash
-gcc -std=c11 -O2 -Wall -Wextra -pedantic -Iinclude src/main.c src/busqueda.c src/ordenamiento.c src/utilidades.c -o actividad.exe
+gcc -std=c11 -O2 -Wall -Wextra -pedantic -Iinclude src/main.c src/busqueda.c src/ordenamiento.c src/utilidades.c src/experimentos.c -o actividad.exe
 ```
 
 > -O2 activa optimizaciones del compilador y las demás opciones ayudan a mantener el código bajo advertencias y comprobaciones del estándar.

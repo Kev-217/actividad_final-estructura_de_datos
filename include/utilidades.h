@@ -1,5 +1,4 @@
 // Si UTILIDADES_H no ha sido definido, entonces define UTILIDADES_H y el contenido del archivo. Esto evita que el archivo se incluya múltiples veces en un proyecto, lo que podría causar errores de compilación.
-// Define las funciones de leer_entero, imprimir_arreglo, copiar_arreglo y esta_ordenado, que se implementan en el archivo utilidades.c
 #ifndef UTILIDADES_H
 #define UTILIDADES_H
 
@@ -24,6 +23,9 @@ void copiar_arreglo(const int origen[], int destino[], int n);
 
 /* Comprueba si el arreglo esta ordenado de menor a mayor. */
 int esta_ordenado(const int arreglo[], int n);
+
+/* Devuelve el tiempo actual en segundos usando un reloj de alta resolucion. */
+double tiempo_actual_segundos(void);
 
 #endif
 // Esto es un comentario que indica que el archivo de encabezado ha sido cerrado correctamente.

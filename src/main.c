@@ -143,6 +143,7 @@ int main(void)
         return 1;
     }
 
+    system("pause");
     do
     {
         unsigned long long comparaciones = 0;
@@ -165,6 +166,9 @@ int main(void)
         {
             int objetivo;
             int posicion;
+            double inicio;
+            double fin;
+            double tiempo_ms;
 
             if (opcion == 2 && !esta_ordenado(arreglo, cantidad))
             {
@@ -172,19 +176,32 @@ int main(void)
                 continue;
             }
 
-            if (!solicitar_entero_rango("Valor que deseas buscar: ", INT_MIN,
-                                        INT_MAX, &objetivo))
+            if (!solicitar_entero_rango("Valor que deseas buscar: ", INT_MIN, INT_MAX, &objetivo))
             {
                 break;
             }
 
+            /* La medicion se hace sin contador para no sumar su sobrecarga. */
+            inicio = tiempo_actual_segundos();
             if (opcion == 1)
             {
-                posicion = busqueda_lineal(arreglo, cantidad, objetivo, &comparaciones);
+                posicion = busqueda_lineal(arreglo, cantidad, objetivo, NULL);
             }
             else
             {
-                posicion = busqueda_binaria(arreglo, cantidad, objetivo, &comparaciones);
+                posicion = busqueda_binaria(arreglo, cantidad, objetivo, NULL);
+            }
+            fin = tiempo_actual_segundos();
+            tiempo_ms = (fin - inicio) * 1000.0;
+
+            /* Se repite la busqueda para contar comparaciones fuera del cronometro. */
+            if (opcion == 1)
+            {
+                busqueda_lineal(arreglo, cantidad, objetivo, &comparaciones);
+            }
+            else
+            {
+                busqueda_binaria(arreglo, cantidad, objetivo, &comparaciones);
             }
 
             if (posicion >= 0)
@@ -195,12 +212,33 @@ int main(void)
             {
                 printf("El elemento no se encontro.\n");
             }
+            printf("Tiempo de ejecucion: %.9f ms (%.3f us)\n",
+                   tiempo_ms, tiempo_ms * 1000.0);
             printf("Comparaciones: %llu\n", comparaciones);
+            printf("Nota: tiempo orientativo de una ejecucion; para comparar rendimiento usa los experimentos.\n");
         }
         else if (opcion == 3 || opcion == 4)
         {
+            double inicio;
+            double fin;
+            double tiempo_ms;
             copiar_arreglo(arreglo, copia, cantidad);
 
+            /* Se cronometra el algoritmo sin el contador de comparaciones. */
+            inicio = tiempo_actual_segundos();
+            if (opcion == 3)
+            {
+                ordenamiento_insercion(copia, cantidad, NULL);
+            }
+            else
+            {
+                quick_sort(copia, cantidad, NULL);
+            }
+            fin = tiempo_actual_segundos();
+            tiempo_ms = (fin - inicio) * 1000.0;
+
+            /* Se vuelve a ordenar una copia para contar sin afectar el tiempo. */
+            copiar_arreglo(arreglo, copia, cantidad);
             if (opcion == 3)
             {
                 ordenamiento_insercion(copia, cantidad, &comparaciones);
@@ -213,8 +251,11 @@ int main(void)
             }
 
             imprimir_arreglo(copia, cantidad);
+            printf("Tiempo de ejecucion: %.9f ms (%.3f us)\n",
+                   tiempo_ms, tiempo_ms * 1000.0);
             printf("Comparaciones: %llu\n", comparaciones);
             printf("El arreglo original se conserva sin cambios.\n");
+            printf("Nota: tiempo orientativo de una ejecucion; para comparar rendimiento usa los experimentos.\n");
         }
         else if (opcion == 5)
         {
@@ -236,6 +277,8 @@ int main(void)
             copia = nueva_copia;
         }
 
+        // Pausa para que el usuario pueda ver los resultados antes de continuar.
+        system("pause");
     } while (opcion != 0);
 
     free(arreglo);
