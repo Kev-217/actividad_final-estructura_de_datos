@@ -1,14 +1,10 @@
-# Ejecutables y archivos objeto compilados en C
+# Ejecutables
 *.exe
 *.out
+
+# Archivos objeto
 *.o
-*.obj
-benchmark
 
-# Carpetas de configuración de editores (VS Code, CLion, etc.)
+# Archivos temporales del editor
 .vscode/
-.idea/
-
-# Archivos temporales del sistema operativo
-.DS_Store
-Thumbs.db
+*.tmp
