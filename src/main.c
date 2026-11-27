@@ -1,3 +1,5 @@
+// Incluimos las bibliotecas necesarias para manejar límites de enteros, entrada/salida, memoria dinámica y tiempo. 
+// También incluimos los archivos de encabezado que contienen las declaraciones de las funciones de búsqueda, experimentos, ordenamiento y utilidades.
 #include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -6,12 +8,12 @@
 #include "experimentos.h"
 #include "ordenamiento.h"
 #include "utilidades.h"
-// Incluimos las bibliotecas necesarias para manejar límites de enteros, entrada/salida, memoria dinámica y tiempo. También incluimos los archivos de encabezado que contienen las declaraciones de las funciones de búsqueda, experimentos, ordenamiento y utilidades.
 
-// Definimos un valor máximo para la cantidad de elementos en el arreglo. Esto nos permite limitar la memoria utilizada y evitar problemas de rendimiento o errores de desbordamiento.
+// Definimos un valor máximo para la cantidad de elementos en el arreglo. 
+// Esto nos permite limitar la memoria utilizada y evitar problemas de rendimiento o errores de desbordamiento.
 #define MAX_ELEMENTOS 5000
 
-// Función para solicitar un número entero dentro de un rango específico. Muestra un mensaje al usuario y valida la entrada. Devuelve 1 si la lectura fue correcta y 0 si el usuario desea salir.
+// Función para solicitar un número entero dentro de un rango específico. Muestra un mensaje al usuario y valida la entrada. 
 static int solicitar_entero_rango(const char *mensaje, int minimo, int maximo, int *valor)
 {
     int resultado;
@@ -32,7 +34,8 @@ static int solicitar_entero_rango(const char *mensaje, int minimo, int maximo, i
     return 1;
 }
 
-// Función para crear un arreglo inicial. Solicita al usuario la cantidad de elementos y el método de creación (manual, pegado o automático). Devuelve 1 si el arreglo se creó correctamente y 0 si hubo algún error o el usuario decidió salir.
+// Función para crear un arreglo inicial. Solicita al usuario la cantidad de elementos y el método de creación (manual, pegado o automático). 
+// Devuelve 1 si el arreglo se creó correctamente y 0 si hubo algún error o el usuario decidió salir.
 static int crear_arreglo_inicial(int **arreglo_actual, int *cantidad_actual)
 {
     int cantidad;
@@ -114,7 +117,8 @@ static int crear_arreglo_inicial(int **arreglo_actual, int *cantidad_actual)
     return 1;
 }
 
-// Función principal del programa. Muestra un menú al usuario para realizar búsquedas, ordenamientos, ejecutar experimentos o crear un nuevo arreglo. Gestiona la memoria y las entradas del usuario.
+// Función principal del programa. Muestra un menú al usuario para realizar búsquedas, ordenamientos, ejecutar experimentos o crear un nuevo arreglo.
+// Gestiona la memoria y las entradas del usuario.
 int main(void)
 {
     int *arreglo = NULL;

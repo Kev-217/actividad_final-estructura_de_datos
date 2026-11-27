@@ -1,6 +1,6 @@
+// Incluye <stddef.h> para disponer de NULL y "ordenamiento.h" con las declaraciones de ordenamiento.
 #include <stddef.h>
 #include "ordenamiento.h"
-// Añadimos la librería stddef.h para poder usar el tipo size_t, que es un tipo de dato entero sin signo que se utiliza para representar tamaños y conteos y también la cabecera "ordenamiento.h" que contiene las declaraciones de las funciones de ordenamiento.
 
 // Esta función intercambia los valores de dos enteros utilizando punteros. Se utiliza en el algoritmo de ordenamiento rápido (quick sort) para mover elementos en el arreglo.
 static void intercambiar(int *a, int *b)
@@ -10,7 +10,9 @@ static void intercambiar(int *a, int *b)
     *b = temporal;
 }
 
-// Implementación del algoritmo de ordenamiento por inserción. Este algoritmo recorre el arreglo y va insertando cada elemento en su posición correcta dentro de la parte ya ordenada del arreglo. Se utiliza un contador de comparaciones para medir la eficiencia del algoritmo.
+// Implementación del algoritmo de ordenamiento por inserción. +
+// Este algoritmo recorre el arreglo y va insertando cada elemento en su posición correcta dentro de la parte ya ordenada del arreglo.
+// Se utiliza un contador de comparaciones para medir la eficiencia del algoritmo.
 void ordenamiento_insercion(int arreglo[], int n, unsigned long long *comparaciones)
 {
     if (comparaciones != NULL)
@@ -66,8 +68,7 @@ static int particionar(int arreglo[], int bajo, int alto, unsigned long long *co
     intercambiar(&arreglo[i + 1], &arreglo[alto]);
     return i + 1;
 }
-
-// Implementación del algoritmo de ordenamiento rápido (quick sort). Este algoritmo utiliza la técnica de divide y vencerás para ordenar el arreglo. Se selecciona un pivote y se reorganizan los elementos del arreglo de manera que los elementos menores al pivote queden a su izquierda y los mayores a su derecha. Luego, se aplica recursivamente el mismo proceso a las sublistas resultantes.
+// Aplica Quick Sort recursivamente sobre el subarreglo dividiendo en torno al pivote.
 static void quick_sort_recursivo(int arreglo[], int bajo, int alto, unsigned long long *comparaciones)
 {
     if (bajo < alto)
@@ -78,7 +79,8 @@ static void quick_sort_recursivo(int arreglo[], int bajo, int alto, unsigned lon
     }
 }
 
-// Función principal para el ordenamiento rápido (quick sort). Esta función inicializa el contador de comparaciones y llama a la función recursiva para ordenar el arreglo completo.
+// Reinicia el contador de comparaciones y ordena el arreglo completo
+// mediante Quick Sort cuando tiene más de un elemento.
 void quick_sort(int arreglo[], int n, unsigned long long *comparaciones)
 {
     if (comparaciones != NULL)

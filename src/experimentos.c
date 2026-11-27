@@ -1,3 +1,6 @@
+// Incluimos las bibliotecas necesarias para manejar errores, entrada/salida, memoria dinámica, 
+// crear directorios y medir el tiempo. También incluimos los archivos de encabezado que contienen las declaraciones
+// de las funciones de búsqueda, experimentos, ordenamiento y utilidades.
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -8,19 +11,23 @@
 #include "experimentos.h"
 #include "ordenamiento.h"
 #include "utilidades.h"
-// Incluimos las bibliotecas necesarias para manejar errores, entrada/salida, memoria dinámica, crear directorios y medir el tiempo. También incluimos los archivos de encabezado que contienen las declaraciones de las funciones de búsqueda, experimentos, ordenamiento y utilidades.
 
-// Definimos dos tipos de punteros a funciones: FuncionBusqueda para funciones de búsqueda y FuncionOrdenamiento para funciones de ordenamiento. Esto nos permite pasar diferentes algoritmos como argumentos a las funciones de experimentos.
+// Define los tipos de punteros a función FuncionBusqueda y FuncionOrdenamiento para agrupar
+// algoritmos en una misma categoría y pasarlos fácilmente a las funciones
+// de experimentos o pruebas sin duplicar código.
 typedef int (*FuncionBusqueda)(const int[], int, int, unsigned long long *);
 typedef void (*FuncionOrdenamiento)(int[], int, unsigned long long *);
 
-// Declaramos una variable global volátil para almacenar resultados de las pruebas y evitar que el compilador optimice su uso. Esto es útil para asegurar que las funciones de búsqueda y ordenamiento se ejecuten realmente durante los experimentos.
+// Declaramos una variable global volátil para almacenar resultados de las pruebas y evitar 
+// que el compilador optimice su uso. 
 static volatile long long resultado_global = 0;
 
-// Función para obtener el tiempo actual en segundos como un número de punto flotante. Utiliza diferentes métodos según el sistema operativo.
+// Función para obtener el tiempo actual en segundos como un número de punto flotante.
+// Utiliza diferentes métodos según el sistema operativo.
 static double obtener_tiempo(void)
 {
-    // Usamos QueryPerformanceCounter para obtener un contador de alta resolución y QueryPerformanceFrequency para obtener la frecuencia del contador. Calculamos el tiempo en segundos dividiendo el valor del contador por la frecuencia.
+    // Usamos QueryPerformanceCounter para obtener un contador de alta resolución y QueryPerformanceFrequency para obtener la frecuencia del contador. 
+    // Calculamos el tiempo en segundos dividiendo el valor del contador por la frecuencia.
     static LARGE_INTEGER frecuencia;
     LARGE_INTEGER contador;
     if (frecuencia.QuadPart == 0)
@@ -42,7 +49,9 @@ static int crear_carpeta_resultados(void)
     return 0;
 }
 
-// Función para crear un archivo CSV único en la carpeta "resultados". Genera un nombre basado en la fecha y hora actual, y agrega un sufijo si el archivo ya existe. Devuelve 1 si el archivo se creó correctamente, y 0 si hubo un error.
+// Crea un archivo CSV único dentro de "resultados" usando el prefijo base y la marca de tiempo
+// recibida en fecha; si ya existe, prueba con un sufijo numérico.
+// Guarda el puntero abierto en *archivo y devuelve 1 si tuvo éxito o 0 si ocurrió un error o se agotaron intentos.
 static int crear_csv_unico(const char *base, char ruta[], size_t capacidad, FILE **archivo, const struct tm *fecha)
 {
     char marca_tiempo[32];
@@ -78,7 +87,8 @@ static int crear_csv_unico(const char *base, char ruta[], size_t capacidad, FILE
     return 0;
 }
 
-// Función para preparar los archivos CSV de resultados. Crea cuatro archivos: detalle y promedios para búsqueda y ordenamiento. Devuelve 1 si todos los archivos se crearon correctamente, y 0 si hubo un error.
+// Función para preparar los archivos CSV de resultados. Crea cuatro archivos: detalle y promedios para búsqueda y ordenamiento.
+// Devuelve 1 si todos los archivos se crearon correctamente, y 0 si hubo un error.
 static int preparar_archivos(FILE **busqueda_detalle, FILE **busqueda_promedios, FILE **ordenamiento_detalle, FILE **ordenamiento_promedios)
 {
     time_t ahora = time(NULL);
@@ -128,7 +138,8 @@ static int preparar_archivos(FILE **busqueda_detalle, FILE **busqueda_promedios,
     return 1;
 }
 
-// Función para ejecutar las pruebas de búsqueda. Realiza experimentos con diferentes tamaños de arreglos y escenarios de búsqueda, midiendo el tiempo y las comparaciones realizadas. Los resultados se escriben en los archivos CSV proporcionados.
+// Función para realizar experimentos con diferentes tamaños de arreglos y escenarios de búsqueda, midiendo el tiempo y las comparaciones realizadas.
+// Los resultados se escriben en los archivos CSV proporcionados.
 static void ejecutar_pruebas_busqueda(FILE *detalle, FILE *promedios)
 {
     const int tamanos[] = {1000, 5000, 10000, 25000, 50000, 100000};
@@ -328,7 +339,9 @@ static void ejecutar_pruebas_ordenamiento(FILE *detalle, FILE *promedios)
     }
 }
 
-// Función principal para ejecutar todos los experimentos de búsqueda y ordenamiento. Prepara los archivos CSV, ejecuta las pruebas y cierra los archivos al finalizar. Devuelve 1 si todo se ejecutó correctamente, y 0 si hubo algún error.
+// Función principal para ejecutar todos los experimentos de búsqueda y ordenamiento.
+// Prepara los archivos CSV, ejecuta las pruebas y cierra los archivos al finalizar.
+// Devuelve 1 si todo se ejecutó correctamente, y 0 si hubo algún error.
 int ejecutar_experimentos(void)
 {
     FILE *busqueda_detalle = NULL;

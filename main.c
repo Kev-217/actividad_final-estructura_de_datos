@@ -9,9 +9,9 @@
 #include "utilidades.h"
 
 #define MAX_ELEMENTOS 5000
-
-static int solicitar_entero_rango(const char *mensaje, int minimo, int maximo,
-                                  int *valor)
+// Lee un entero desde la entrada estándar y repite la solicitud hasta obtener
+// un valor dentro del rango minimo o maximo. Devuelve 1 si tuvo éxito o 0 ante EOF/error.
+static int solicitar_entero_rango(const char *mensaje, int minimo, int maximo, int *valor)
 {
     int resultado;
 
@@ -28,7 +28,8 @@ static int solicitar_entero_rango(const char *mensaje, int minimo, int maximo,
 
     return 1;
 }
-
+// Solicita el tamaño y el método de carga para construir un nuevo arreglo dinámico.
+// Actualiza *arreglo_actual y *cantidad_actual si todo sale bien.
 static int crear_arreglo_inicial(int **arreglo_actual, int *cantidad_actual)
 {
     int cantidad;

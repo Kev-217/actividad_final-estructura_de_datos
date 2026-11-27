@@ -1,3 +1,7 @@
+// Añadimos las librerías ctype.h, errno.h, limits.h, stdio.h, stdlib.h, string.h, time.h y windows.h
+// para poder usar funciones de manejo de caracteres, manejo de errores, límites de enteros, entrada/salida estándar, 
+// funciones de utilidad general, manipulación de cadenas, manejo de tiempo y funciones específicas de Windows.
+// También incluimos la cabecera "utilidades.h" que contiene las declaraciones de las funciones implementadas en este archivo.
 #include <ctype.h>
 #include <errno.h>
 #include <limits.h>
@@ -7,9 +11,9 @@
 #include <time.h>
 #include <windows.h>
 #include "utilidades.h"
-// Añadimos las librerías ctype.h, errno.h, limits.h, stdio.h, stdlib.h, string.h, time.h y windows.h para poder usar funciones de manejo de caracteres, manejo de errores, límites de enteros, entrada/salida estándar, funciones de utilidad general, manipulación de cadenas, manejo de tiempo y funciones específicas de Windows. También incluimos la cabecera "utilidades.h" que contiene las declaraciones de las funciones implementadas en este archivo.
 
-// Implementación de la función leer_entero. Esta función lee un número entero desde la entrada estándar, mostrando un mensaje al usuario. Recibe un mensaje y un puntero a un entero donde almacenar el valor leído. Devuelve 1 si la lectura fue correcta, 0 si hubo un error de formato y -1 si ocurrió un error de entrada/salida.
+// Lee un entero mostrando mensaje y valida que no haya basura extra ni desbordamiento.
+// Devuelve 1 si la lectura fue correcta, 0 si hubo un error de formato y -1 si ocurrió un error de entrada/salida.
 int leer_entero(const char *mensaje, int *valor)
 {
     char linea[128];
@@ -23,7 +27,8 @@ int leer_entero(const char *mensaje, int *valor)
         return -1;
     }
 
-    // Comprobamos si la línea leída es demasiado larga. Si no contiene un salto de línea y no hemos llegado al final del archivo, descartamos el resto de la línea y devolvemos 0 indicando un error de formato.
+    // Comprobamos si la línea leída es demasiado larga. Si no contiene un salto de línea y no hemos llegado al final del archivo, 
+    // descartamos el resto de la línea y devolvemos 0 indicando un error de formato.
     if (strchr(linea, '\n') == NULL && !feof(stdin))
     {
         int caracter;
@@ -34,7 +39,9 @@ int leer_entero(const char *mensaje, int *valor)
         return 0;
     }
 
-    // Intentamos convertir la línea leída a un número entero. Comprobamos si la conversión fue exitosa y si el número está dentro del rango de un entero. Si no, devolvemos 0 indicando un error de formato.
+    // Intentamos convertir la línea leída a un número entero.
+    // Comprobamos si la conversión fue exitosa y si el número está dentro del rango de un entero. Si no,
+    // devolvemos 0 indicando un error de formato.
     errno = 0;
     numero = strtol(linea, &fin, 10);
     if (fin == linea || errno == ERANGE || numero < INT_MIN || numero > INT_MAX)
@@ -58,10 +65,13 @@ int leer_entero(const char *mensaje, int *valor)
     return 1;
 }
 
-// Implementación de la función leer_arreglo_manual. Esta función permite al usuario ingresar manualmente los elementos de un arreglo de enteros. Recibe un arreglo y su tamaño, y devuelve 1 si la lectura fue correcta, 0 si hubo un error de formato y -1 si ocurrió un error de entrada/salida.
+// Solicita uno a uno los n elementos del arreglo mediante leer_entero, reintentando ante entradas
+// inválidas. Devuelve 1 al completar el arreglo o -1 si ocurre un error de entrada/salida.
 int leer_arreglo_manual(int arreglo[], int n)
 {
-    // Iteramos sobre cada posición del arreglo, solicitando al usuario que ingrese un número entero. Si ocurre un error de entrada/salida, devolvemos -1. Si el usuario ingresa un valor no válido, mostramos un mensaje de error y le pedimos que intente nuevamente.
+    // Iteramos sobre cada posición del arreglo, solicitando al usuario que ingrese un número entero. 
+    // Si ocurre un error de entrada/salida, devolvemos -1. Si el usuario ingresa un valor no válido,
+    // mostramos un mensaje de error y le pedimos que intente nuevamente.
     for (int i = 0; i < n; i++)
     {
         char mensaje[80];
@@ -87,10 +97,13 @@ int leer_arreglo_manual(int arreglo[], int n)
     return 1;
 }
 
-// Implementación de la función leer_arreglo_pegado. Esta función permite al usuario ingresar todos los elementos de un arreglo de enteros en una sola línea, separados por espacios. Recibe un arreglo y su tamaño, y devuelve 1 si la lectura fue correcta, 0 si hubo un error de formato y -1 si ocurrió un error de entrada/salida.
+// Implementación de la función leer_arreglo_pegado.
+// Esta función permite al usuario ingresar todos los elementos de un arreglo de enteros en una sola línea, separados por espacios.
+// Recibe un arreglo y su tamaño, y devuelve 1 si la lectura fue correcta, 0 si hubo un error de formato y -1 si ocurrió un error de entrada/salida.
 int leer_arreglo_pegado(int arreglo[], int n)
 {
-    // Calculamos la capacidad necesaria para almacenar la línea de entrada, considerando un tamaño máximo de 13 caracteres por número (incluyendo signo y espacio) y un carácter adicional para el salto de línea. Reservamos memoria para la línea y un arreglo temporal para almacenar los números leídos.
+    // Calculamos la capacidad necesaria para almacenar la línea de entrada, considerando un tamaño máximo de 13 caracteres por número (incluyendo signo y espacio) y un carácter adicional para el salto de línea.
+    // Reservamos memoria para la línea y un arreglo temporal para almacenar los números leídos.
     size_t capacidad = (size_t)n * 13U + 4U;
     char *linea = malloc(capacidad);
     int *temporal = malloc((size_t)n * sizeof(int));
@@ -107,7 +120,8 @@ int leer_arreglo_pegado(int arreglo[], int n)
         return 0;
     }
 
-    // Solicitamos al usuario que ingrese todos los elementos del arreglo en una sola línea, separados por espacios. Leemos la línea de entrada y comprobamos si ocurrió un error de entrada/salida. Si ocurre, liberamos la memoria y devolvemos -1.
+    // Solicitamos al usuario que ingrese todos los elementos del arreglo en una sola línea, separados por espacios.
+    // Leemos la línea de entrada y comprobamos si ocurrió un error de entrada/salida. Si ocurre, liberamos la memoria y devolvemos -1.
     printf("Pega los %d enteros en una sola linea, separados por espacios:\n> ", n);
     if (fgets(linea, (int)capacidad, stdin) == NULL)
     {
@@ -130,7 +144,9 @@ int leer_arreglo_pegado(int arreglo[], int n)
         return 0;
     }
 
-    // Procesamos la línea leída, separando los números por espacios y convirtiéndolos a enteros. Comprobamos si cada número es válido y si la cantidad de números ingresados coincide con el tamaño del arreglo. Si hay algún error, mostramos un mensaje de error y liberamos la memoria antes de devolver 0 indicando un error.
+    // Procesamos la línea leída, separando los números por espacios y convirtiéndolos a enteros. 
+    // Comprobamos si cada número es válido y si la cantidad de números ingresados coincide con el tamaño del arreglo. 
+    // Si hay algún error, mostramos un mensaje de error y liberamos la memoria antes de devolver 0 indicando un error.
     actual = linea;
     while (*actual != '\0')
     {
@@ -168,7 +184,8 @@ int leer_arreglo_pegado(int arreglo[], int n)
         }
     }
 
-    // Comprobamos si hubo algún error durante la lectura de los números. Si hubo un dato inválido o si la cantidad de números ingresados no coincide con el tamaño del arreglo, mostramos un mensaje de error y liberamos la memoria antes de devolver 0 indicando un error.
+    // Comprobamos si hubo algún error durante la lectura de los números.
+    // Si hubo un dato inválido o si la cantidad de números ingresados no coincide con el tamaño del arreglo, mostramos un mensaje de error y liberamos la memoria antes de devolver 0 indicando un error.
     if (invalido)
     {
         printf("Se encontro un dato que no es un numero entero valido. Intenta nuevamente.\n");
@@ -197,7 +214,8 @@ int leer_arreglo_pegado(int arreglo[], int n)
     return 0;
 }
 
-// Implementación de la función generar_arreglo. Esta función genera un arreglo de enteros con valores del 0 al n-1 y lo modifica según el tipo especificado. Recibe un arreglo, su tamaño y un tipo que indica cómo se debe generar el arreglo: 1 para aleatorio, 2 para ordenado, 3 para inversamente ordenado y 4 para casi ordenado.
+// Esta función genera un arreglo de enteros con valores del 0 al n-1 y lo modifica según el tipo especificado. 
+// Recibe un arreglo, su tamaño y un tipo que indica cómo se debe generar el arreglo: 1 para aleatorio, 2 para ordenado, 3 para inversamente ordenado y 4 para casi ordenado.
 void generar_arreglo(int arreglo[], int n, int tipo)
 {
     for (int i = 0; i < n; i++)
@@ -246,7 +264,8 @@ void generar_arreglo(int arreglo[], int n, int tipo)
     // tipo 2 permanece ordenado.
 }
 
-// Implementación de la función imprimir_arreglo. Esta función muestra los elementos de un arreglo de enteros en la salida estándar. Si el tamaño del arreglo es mayor a 40, muestra los primeros 20 y los últimos 20 elementos, indicando cuántos elementos hay en total.
+// Esta función muestra los elementos de un arreglo de enteros en la salida estándar. 
+// Si el tamaño del arreglo es mayor a 40, muestra los primeros 20 y los últimos 20 elementos, indicando cuántos elementos hay en total.
 void imprimir_arreglo(const int arreglo[], int n)
 {
     const int limite = 20;
@@ -273,7 +292,8 @@ void imprimir_arreglo(const int arreglo[], int n)
     }
 }
 
-// Implementación de la función copiar_arreglo. Esta función copia los elementos de un arreglo de enteros en otro arreglo. Recibe un arreglo de origen, un arreglo de destino y el tamaño del arreglo.
+// Esta función copia los elementos de un arreglo de enteros en otro arreglo.
+// Recibe un arreglo de origen, un arreglo de destino y el tamaño del arreglo.
 void copiar_arreglo(const int origen[], int destino[], int n)
 {
     for (int i = 0; i < n; i++)
@@ -282,7 +302,8 @@ void copiar_arreglo(const int origen[], int destino[], int n)
     }
 }
 
-// Implementación de la función esta_ordenado. Esta función verifica si un arreglo de enteros está ordenado en orden ascendente. Recibe un arreglo y su tamaño, y devuelve 1 si está ordenado o 0 en caso contrario.
+// Esta función verifica si un arreglo de enteros está ordenado en orden ascendente.
+// Recibe un arreglo y su tamaño, y devuelve 1 si está ordenado o 0 en caso contrario.
 int esta_ordenado(const int arreglo[], int n)
 {
     for (int i = 1; i < n; i++)
@@ -295,7 +316,8 @@ int esta_ordenado(const int arreglo[], int n)
     return 1;
 }
 
-// Implementación de la función tiempo_actual_segundos. Esta función devuelve el tiempo actual en segundos como un número de punto flotante. Utiliza funciones específicas de Windows si está disponible, o una alternativa portable si no lo está.
+// Esta función devuelve el tiempo actual en segundos como un número de punto flotante. 
+// Utiliza funciones específicas de Windows si está disponible, o una alternativa portable si no lo está.
 double tiempo_actual_segundos(void)
 {
 #ifdef _WIN32
