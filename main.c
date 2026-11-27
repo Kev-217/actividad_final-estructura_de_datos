@@ -21,15 +21,13 @@ static int solicitar_entero_rango(const char *mensaje, int minimo, int maximo, i
             return 0;
         }
         if (resultado == 0 || *valor < minimo || *valor > maximo) {
-            printf("Entrada invalida. Introduce un valor entre %d y %d.\n",
-                   minimo, maximo);
+            printf("Entrada invalida. Introduce un valor entre %d y %d.\n", minimo, maximo);
         }
     } while (resultado == 0 || *valor < minimo || *valor > maximo);
 
     return 1;
 }
-// Solicita el tamaño y el método de carga para construir un nuevo arreglo dinámico.
-// Actualiza *arreglo_actual y *cantidad_actual si todo sale bien.
+// Solicita el tamaño y el método de carga para construir un nuevo arreglo dinámico. Actualiza *arreglo_actual y *cantidad_actual si todo sale bien
 static int crear_arreglo_inicial(int **arreglo_actual, int *cantidad_actual)
 {
     int cantidad;
@@ -37,8 +35,7 @@ static int crear_arreglo_inicial(int **arreglo_actual, int *cantidad_actual)
     int *nuevo_arreglo;
 
     printf("\n====== CREAR ARREGLO ======\n");
-    if (!solicitar_entero_rango("Cantidad de elementos (1-5000): ",
-                                1, MAX_ELEMENTOS, &cantidad)) {
+    if (!solicitar_entero_rango("Cantidad de elementos (1-5000): ", 1, MAX_ELEMENTOS, &cantidad)) {
         return 0;
     }
 
